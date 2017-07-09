@@ -1,0 +1,47 @@
+.App {}
+
+.App-header {
+  text-align: center;
+  background: #222;
+  padding: 20px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.logo img {
+  height: 100px;
+}
+
+.content {
+  margin: 20px;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotateY(90deg);
+  }
+  to {
+    transform: rotateY(270deg);
+  }
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.results .fa-star {
+  color: yellow;
+}
+
+.card {
+  padding: 10px;
+  background-color: #fefefe;
+}
+
+.form-group .input-group-addon, .input-group .input-group-addon {
+    padding: 7px 0 6px 18px;
+}
+
+.rounded-circle {
+  border-radius: 50%;
+}
