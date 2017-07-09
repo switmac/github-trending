@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import 'now-ui-kit/assets/css/now-ui-kit.css';
 import 'font-awesome/css/font-awesome.min.css';
-import './App.css';
-import logo from './line.svg'
+import '../style/App.css';
+import logo from '../img/line.svg'
 
 import Author from './Author';
 import Repository from './Repository';
@@ -21,7 +21,8 @@ class App extends Component {
       limit: 500,
       query: "",
       category: "repositories",
-      search: ""
+      search: "",
+      request_complete: false
     };
 
     this.getResults = this.getResults.bind(this);
@@ -31,11 +32,12 @@ class App extends Component {
   componentWillMount() {
     let url = `repositories?q=stars:">=1000"&sort=stars&order=desc`;
     this.get(url);
-    this.setState({search : "repositories"});
+    this.setState({search: "repositories"});
   }
 
   getResults(event) {
     event.preventDefault();
+    this.setState({request_complete: false});
     this.get(this.filterUrl());
   }
 
@@ -61,19 +63,19 @@ class App extends Component {
     switch (this.state.category) {
       case 'repositories':
         url = `repositories?q=${query_str}stars:">=${this.state.limit}"&sort=stars&order=desc`;
-        this.setState({search : "repositories"});
+        this.setState({search: "repositories"});
         break;
       case 'users':
         url = `users?q=${query_str}followers:">=${this.state.limit}"&sort=followers&order=desc`;
-        this.setState({search : "users"});
+        this.setState({search: "users"});
         break;
       case 'forks':
         url = `repositories?q=${query_str}forks:">=${this.state.limit}"&sort=forks&order=desc`;
-        this.setState({search : "forks"});
+        this.setState({search: "forks"});
         break;
       default:
         url = `repositories?q=${query_str}stars:">=${this.state.limit}"&sort=stars&order=desc`;
-        this.setState({search : "repositories"});
+        this.setState({search: "repositories"});
     }
 
     return url;
@@ -85,6 +87,7 @@ class App extends Component {
     axios.get(url).then(function(response) {
       vm.setState({items: response.data.items});
       vm.setState({items_count: response.data.total_count});
+      vm.setState({request_complete: true});
     }).catch(function(error) {
       console.log(error);
     });
@@ -172,9 +175,9 @@ class App extends Component {
           </div>
           <div className="results">
             <h5>Total Results : {this.state.items_count}</h5>
-              { this.state.search === "users" && <Author items={this.state.items}/> }
-              { this.state.search === "forks" && <Fork items={this.state.items}/> }
-              { this.state.search === "repositories" && <Repository items={this.state.items}/> }
+            {this.state.search === "users" && this.state.request_complete && <Author items={this.state.items}/>}
+            {this.state.search === "forks" && this.state.request_complete &&  <Fork items={this.state.items}/>}
+            {this.state.search === "repositories" && this.state.request_complete && <Repository items={this.state.items}/>}
           </div>
         </div>
       </div>

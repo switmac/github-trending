@@ -29,13 +29,13 @@
   text-transform: uppercase;
 }
 
-.results .fa-star {
-  color: yellow;
-}
-
 .card {
   padding: 10px;
   background-color: #fefefe;
+}
+
+.card p {
+  margin-top: 10px;
 }
 
 .form-group .input-group-addon, .input-group .input-group-addon {
