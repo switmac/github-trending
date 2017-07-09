@@ -22,27 +22,29 @@ class App extends Component {
       query: "",
       category: "repositories",
       search: "",
-      request_complete: false
+      request_complete: false,
+      page_no: 1
     };
 
     this.getResults = this.getResults.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.getPage = this.getPage.bind(this);
   }
 
   componentWillMount() {
-    let url = `repositories?q=stars:">=1000"&sort=stars&order=desc`;
+    let url = `repositories?q=stars:">=1000"&sort=stars&order=desc&per_page=20`;
     this.get(url);
     this.setState({search: "repositories"});
   }
 
-  getResults(event) {
+  getResults(event, page_no) {
     event.preventDefault();
     this.setState({request_complete: false});
-    this.get(this.filterUrl());
+    this.get(this.filterUrl(page_no));
   }
 
-  filterUrl() {
-    let url = `repositories?q=stars:">=${this.state.limit}"&sort=stars&order=desc`,
+  filterUrl(page_no) {
+    let url = `repositories?q=stars:">=${this.state.limit}"&sort=stars&order=desc&per_page=20`,
       query_type = "topic";
 
     if (this.state.category === "users") {
@@ -62,21 +64,23 @@ class App extends Component {
 
     switch (this.state.category) {
       case 'repositories':
-        url = `repositories?q=${query_str}stars:">=${this.state.limit}"&sort=stars&order=desc`;
+        url = `repositories?q=${query_str}stars:">=${this.state.limit}"&sort=stars&order=desc&per_page=20`;
         this.setState({search: "repositories"});
         break;
       case 'users':
-        url = `users?q=${query_str}followers:">=${this.state.limit}"&sort=followers&order=desc`;
+        url = `users?q=${query_str}followers:">=${this.state.limit}"&sort=followers&order=desc&per_page=24`;
         this.setState({search: "users"});
         break;
       case 'forks':
-        url = `repositories?q=${query_str}forks:">=${this.state.limit}"&sort=forks&order=desc`;
+        url = `repositories?q=${query_str}forks:">=${this.state.limit}"&sort=forks&order=desc&per_page=20`;
         this.setState({search: "forks"});
         break;
       default:
-        url = `repositories?q=${query_str}stars:">=${this.state.limit}"&sort=stars&order=desc`;
+        url = `repositories?q=${query_str}stars:">=${this.state.limit}"&sort=stars&order=desc&per_page=20`;
         this.setState({search: "repositories"});
     }
+
+    url += '&page='+page_no;
 
     return url;
   }
@@ -99,6 +103,14 @@ class App extends Component {
     const name = target.name;
 
     this.setState({[name]: value});
+  }
+
+  getPage(event){
+    const target = event.target;
+    const page_no = target.innerHTML;
+
+    this.setState({page_no: page_no});
+    this.getResults(event, page_no);
   }
 
   render() {
@@ -138,7 +150,7 @@ class App extends Component {
           <h5>Search the ins and outs of the free world.</h5>
         </div>
         <div className="content">
-          <div className="query">
+          <section className="query">
             <form className="form" onSubmit={this.getResults}>
               <div className="row">
                 <div className="col-sm-2">
@@ -172,13 +184,35 @@ class App extends Component {
                 </div>
               </div>
             </form>
-          </div>
-          <div className="results">
+          </section>
+          <section className="results">
             <h5>Total Results : {this.state.items_count}</h5>
             {this.state.search === "users" && this.state.request_complete && <Author items={this.state.items}/>}
             {this.state.search === "forks" && this.state.request_complete &&  <Fork items={this.state.items}/>}
             {this.state.search === "repositories" && this.state.request_complete && <Repository items={this.state.items}/>}
-          </div>
+
+            {this.state.items_count > 20 && this.state.request_complete &&
+              <section className="text-center">
+                <ul className="pagination pagination-primary">
+                    <li className={(this.state.page_no == 1) ? 'active page-item' : 'page-item'}>
+                        <a className="page-link" onClick={this.getPage}>1</a>
+                    </li>
+                    <li className={(this.state.page_no == 2) ? 'active page-item' : 'page-item'}>
+                        <a className="page-link" onClick={this.getPage}>2</a>
+                    </li>
+                    <li className={(this.state.page_no == 3) ? 'active page-item' : 'page-item'}>
+                        <a className="page-link"  onClick={this.getPage}>3</a>
+                    </li>
+                    <li className={(this.state.page_no == 4) ? 'active page-item' : 'page-item'}>
+                        <a className="page-link"  onClick={this.getPage}>4</a>
+                    </li>
+                    <li className={(this.state.page_no == 5) ? 'active page-item' : 'page-item'}>
+                        <a className="page-link"  onClick={this.getPage}>5</a>
+                    </li>
+                </ul>
+              </section>
+            }
+          </section>
         </div>
       </div>
     );
