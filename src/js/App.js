@@ -180,7 +180,7 @@ class App extends Component {
                       <span className="input-group-addon">
                         {icon}
                       </span>
-                      <input name="stars" value={this.state.limit} onChange={this.handleChange} type="number" placeholder={limit_placeholder} className="form-control"/>
+                      <input name="limit" value={this.state.limit} onChange={this.handleChange} type="number" placeholder={limit_placeholder} className="form-control"/>
                     </div>
                   </div>
                 </div>
