@@ -16,17 +16,19 @@
   margin: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotateY(90deg);
-  }
-  to {
-    transform: rotateY(270deg);
-  }
+.form-group .input-group-addon,
+.input-group .input-group-addon {
+  padding: 7px 0 6px 18px;
 }
 
-.text-uppercase {
-  text-transform: uppercase;
+.input-group .form-control:focus < .input-group-addon
+ {
+  border: 1px solid #f96332;
+  border-right: 0;
+}
+
+.results {
+  min-height: 300px;
 }
 
 .card {
@@ -38,10 +40,16 @@
   margin-top: 10px;
 }
 
-.form-group .input-group-addon, .input-group .input-group-addon {
-    padding: 7px 0 6px 18px;
-}
-
 .rounded-circle {
   border-radius: 50%;
+  min-width: 100%;
+}
+
+.loading-div {
+  min-height: 300px;
+  text-align: center;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
 }
